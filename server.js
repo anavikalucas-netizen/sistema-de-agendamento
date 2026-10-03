@@ -12,11 +12,7 @@ app.use("/usuarios", usuarioRoutes);
 app.use("/medicos", medicoRoutes);
 app.use("/horarios", horarioRoutes);
 app.use("/consultas", consultaRoutes);
-app.get("/", (req, res) => {
-    res.json({
-        mensagem: "API Agenda Cidade funcionando!"
-    });
-});
+app.use(express.static("."));
 
 const PORT = 3000;
 
