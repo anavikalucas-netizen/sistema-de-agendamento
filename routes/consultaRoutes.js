@@ -30,4 +30,43 @@ router.get("/", (req, res) => {
     });
 });
 
+// Consultar uma consulta
+router.get("/:id", (req, res) => {
+    const { id } = req.params;
+
+    res.json({
+        mensagem: "Consulta encontrada!",
+        consulta: {
+            id,
+            status: "agendada"
+        }
+    });
+});
+
+// Cancelar consulta
+router.put("/:id/cancelar", (req, res) => {
+    const { id } = req.params;
+
+    res.json({
+        mensagem: "Consulta cancelada com sucesso!",
+        consulta: {
+            id,
+            status: "cancelada"
+        }
+    });
+});
+
+// Confirmar consulta
+router.put("/:id/confirmar", (req, res) => {
+    const { id } = req.params;
+
+    res.json({
+        mensagem: "Consulta confirmada com sucesso!",
+        consulta: {
+            id,
+            status: "confirmada"
+        }
+    });
+});
+
 module.exports = router;
