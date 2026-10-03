@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Usuario {
+  id        String   @id @default(uuid())
+  nome      String
+  email     String   @unique
+  senha     String
+  telefone  String?
+  createdAt DateTime @default(now())
+
+  consultas Consulta[]
+}
+
+model Medico {
+  id             String   @id @default(uuid())
+  nome           String
+  especialidade  String
+  crm            String   @unique
+  createdAt      DateTime @default(now())
+
+  horarios  Horario[]
+  consultas Consulta[]
+}
+
+model Horario {
+  id         String   @id @default(uuid())
+  data       DateTime
+  disponivel Boolean  @default(true)
+
+  medicoId String
+  medico   Medico   @relation(fields: [medicoId], references: [id])
+
+  consulta Consulta?
+}
+
+model Consulta {
+  id        String   @id @default(uuid())
+  status    String   @default("agendada")
+  createdAt DateTime @default(now())
+
+  usuarioId String
+  medicoId  String
+  horarioId String   @unique
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  medico  Medico  @relation(fields: [medicoId], references: [id])
+  horario Horario @relation(fields: [horarioId], references: [id])
+}
