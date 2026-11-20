@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Médicos - Agenda Cidade</title>
+    <link rel="stylesheet" href="styl.css">
+</head>
+<body>
+    <header>
+        <h1>Agenda Cidade</h1>
+        <p>Sistema de Agendamento de Consultas</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Cadastro de Médicos</h2>
+
+            <form id="formCadastroMedico">
+                <label for="nomeMedico">Nome do médico:</label>
+                <input type="text" id="nomeMedico" required>
+
+                <label for="especialidadeMedico">Especialidade:</label>
+                <input type="text" id="especialidadeMedico" required>
+
+                <label for="crmMedico">CRM:</label>
+                <input type="text" id="crmMedico" required>
+
+                <button type="submit">Cadastrar médico</button>
+            </form>
+
+            <p id="mensagemMedico"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Agenda Cidade</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

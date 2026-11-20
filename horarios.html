@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styl.css">
 </head>
 <body>
-
     <header>
         <h1>Agenda Cidade</h1>
         <p>Sistema de Agendamento de Consultas</p>
@@ -15,18 +14,24 @@
 
     <main>
         <section>
-            <h2>Horários disponíveis</h2>
+            <h2>Cadastrar horários disponíveis</h2>
 
-            <p>Escolha um horário para sua consulta:</p>
+            <form id="formHorario">
+                <label for="medico">Selecione o médico:</label>
+                <select id="medico" required>
+                    <option value="">Carregando médicos...</option>
+                </select>
 
-            <div>
-                <button>08:00</button>
-                <button>09:00</button>
-                <button>10:00</button>
-                <button>14:00</button>
-                <button>15:00</button>
-                <button>16:00</button>
-            </div>
+                <label for="dataHorario">Data e horário:</label>
+                <input type="datetime-local" id="dataHorario" required>
+
+                <button type="submit">Cadastrar horário</button>
+            </form>
+
+            <p id="mensagemHorario"></p>
+
+            <h2>Horários cadastrados</h2>
+            <div id="listaHorarios">Carregando horários...</div>
         </section>
     </main>
 
@@ -34,5 +39,91 @@
         <p>&copy; 2026 Agenda Cidade</p>
     </footer>
 
+    <script>
+        const campoMedico = document.getElementById("medico");
+        const formulario = document.getElementById("formHorario");
+        const mensagem = document.getElementById("mensagemHorario");
+        const lista = document.getElementById("listaHorarios");
+
+        async function carregarDados() {
+            try {
+                const respostaMedicos = await fetch("/medicos");
+                const medicos = await respostaMedicos.json();
+
+                campoMedico.innerHTML = '<option value="">Selecione um médico</option>';
+
+                medicos.forEach(medico => {
+                    const opcao = document.createElement("option");
+                    opcao.value = medico.id;
+                    opcao.textContent = medico.nome + " - " + medico.especialidade;
+                    campoMedico.appendChild(opcao);
+                });
+
+                await carregarHorarios();
+            } catch (erro) {
+                mensagem.textContent = "Erro ao carregar os dados.";
+            }
+        }
+
+        async function carregarHorarios() {
+            try {
+                const resposta = await fetch("/horarios");
+                const horarios = await resposta.json();
+
+                lista.innerHTML = "";
+
+                if (horarios.length === 0) {
+                    lista.textContent = "Nenhum horário disponível.";
+                    return;
+                }
+
+                horarios.forEach(horario => {
+                    const item = document.createElement("p");
+                    const data = new Date(horario.data);
+
+                    item.textContent =
+                        horario.medico.nome + " - " +
+                        data.toLocaleString("pt-BR");
+
+                    lista.appendChild(item);
+                });
+            } catch (erro) {
+                lista.textContent = "Não foi possível carregar os horários.";
+            }
+        }
+
+        formulario.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            try {
+                const resposta = await fetch("/horarios", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        medicoId: campoMedico.value,
+                        data: document.getElementById("dataHorario").value
+                    })
+                });
+
+                const resultado = await resposta.json();
+                mensagem.textContent = resultado.mensagem;
+
+                if (resposta.ok) {
+                    mensagem.style.color = "green";
+                    formulario.reset();
+                    await carregarHorarios();
+                } else {
+                    mensagem.style.color = "red";
+                }
+            } catch (erro) {
+                mensagem.textContent = "Não foi possível cadastrar o horário.";
+                mensagem.style.color = "red";
+            }
+        });
+
+        carregarDados();
+    </script>
 </body>
 </html>

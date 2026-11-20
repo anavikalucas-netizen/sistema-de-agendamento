@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -17,8 +17,9 @@
         <section>
             <h2>Pesquisar médicos</h2>
 
-            <form>
+            <form id="formPesquisaMedicos">
                 <label for="especialidade">Especialidade:</label>
+
                 <input
                     type="text"
                     id="especialidade"
@@ -31,8 +32,11 @@
             <div>
                 <h3>Médicos disponíveis</h3>
 
-                <p>Dr. João Silva - Clínico Geral</p>
-                <p>Dra. Maria Santos - Cardiologia</p>
+                <div id="listaMedicos">
+                    Carregando médicos...
+                </div>
+
+                <p id="mensagemMedicos"></p>
             </div>
         </section>
     </main>
@@ -40,6 +44,8 @@
     <footer>
         <p>&copy; 2026 Agenda Cidade</p>
     </footer>
+
+    <script src="script.js"></script>
 
 </body>
 </html>
